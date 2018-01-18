@@ -34,11 +34,11 @@ func echo(fd int) {
 	defer syscall.Close(fd)
 	var buf [32 * 1024]byte
 	for {
-		fmt.Println("wait Read:", fd)
-		nbytes, e := syscall.Read(fd, buf[:])
+		fmt.Println("waiting Read:", fd)
+		nbytes, e := syscall.Read(fd, buf[:]) // blocking!
 		if nbytes > 0 {
 			fmt.Printf(">>> %s", buf)
-			syscall.Write(fd, buf[:nbytes])
+			syscall.Write(fd, buf[:nbytes]) // blocking!
 			fmt.Printf("<<< %s", buf)
 		}
 		if e != nil {
@@ -59,7 +59,8 @@ func main() {
 	defer syscall.Close(listenFd)
 
 	for {
-		connFd, _, err := syscall.Accept(listenFd)
+		fmt.Println("waiting new connection")
+		connFd, _, err := syscall.Accept(listenFd) // blocking!
 		if err != nil {
 			exit(err)
 		}

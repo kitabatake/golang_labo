@@ -1,3 +1,4 @@
+// epoll周りの処理をまとめた感じ
 package main
 
 import (
